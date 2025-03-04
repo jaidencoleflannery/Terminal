@@ -1,29 +1,33 @@
 using Microsoft.AspNetCore.Mvc;
+using Models;
+using Data;
 
-namespace Controllers.ConversationController;
-
-[ApiController]
-[Route("/conversation")]
-public class ConversationController : ControllerBase
-{
-    private static string[] Messages = new[];
-
-    private readonly ILogger<ConversationController> _logger;
-
-    public ConversationController(ILogger<ConversationController> logger)
+namespace Controllers.ConversationController {
+    [ApiController]
+    [Route("/conversation")]
+    public class ConversationController : ControllerBase
     {
-        _logger = logger;
-    }
+        public static List<Message> Messages = new List<Message>();
 
-    [HttpPost(Name = "GetConversation")]
-    public IEnumerable<Messages> Get()
-    {
-        return Messages;
-    }
+        private readonly ILogger<ConversationController> _logger;
 
-    [HttpPost(Name = "GetConversation")]
-    public IEnumerable<Messages> Get()
-    {
-        return Messages;
+        public ConversationController(ILogger<ConversationController> logger)
+        {
+            _logger = logger;
+        }
+
+        [HttpPost("/get", Name = "GetMessages")]
+        public List<Message> Get()
+        {
+            return Messages;
+        }
+
+        [HttpPost("/value", Name = "PostMessage")]
+        public List<Message> Post([FromBody] Message message)
+        {
+            Messages.Add(message);
+            Console.WriteLine(message);
+            return Messages;
+        }
     }
 }
