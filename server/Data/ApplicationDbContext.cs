@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Models;
 
 namespace Data
 {
@@ -8,6 +9,8 @@ namespace Data
             : base(options)
         {
         }
-        // DbSet properties...
+        public DbSet<Messages> Messages { get; set; }
+        public DbSet<Sources> Sources { get; set; }
+        public DbSet<Summaries> Summaries { get; set; }
     }
 }

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Data;
@@ -7,7 +8,7 @@ namespace Controllers.ConversationController {
     [Route("/conversation")]
     public class ConversationController : ControllerBase
     {
-        public static List<Message> Messages = new List<Message>();
+        public static List<Messages> Messages = new List<Messages>();
 
         private readonly ILogger<ConversationController> _logger;
 
@@ -17,13 +18,13 @@ namespace Controllers.ConversationController {
         }
 
         [HttpPost("/get", Name = "GetMessages")]
-        public List<Message> Get()
+        public List<Messages> Get()
         {
             return Messages;
         }
 
         [HttpPost("/value", Name = "PostMessage")]
-        public List<Message> Post([FromBody] Message message)
+        public List<Messages> Post([FromBody] Messages message)
         {
             Messages.Add(message);
             Console.WriteLine(message);
