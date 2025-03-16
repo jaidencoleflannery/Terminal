@@ -8,27 +8,34 @@ namespace Controllers.ConversationController {
     [Route("/conversation")]
     public class ConversationController : ControllerBase
     {
+
+        private readonly ApplicationDbContext _context;
         public static List<Messages> Messages = new List<Messages>();
 
         private readonly ILogger<ConversationController> _logger;
 
-        public ConversationController(ILogger<ConversationController> logger)
+        public ConversationController(ILogger<ConversationController> logger, ApplicationDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         [HttpPost("/get", Name = "GetMessages")]
         public List<Messages> Get()
         {
+            Console.WriteLine(Messages);
             return Messages;
         }
 
         [HttpPost("/value", Name = "PostMessage")]
-        public List<Messages> Post([FromBody] Messages message)
+        public async Task<IActionResult> Post([FromBody] Messages message)
         {
-            Messages.Add(message);
-            Console.WriteLine(message);
-            return Messages;
+            if (!ModelState.IsValid) {
+                return BadRequest(ModelState);
+            }
+            await _context.Messages.AddAsync(message);
+            await _context.SaveChangesAsync();
+            return CreatedAtRoute("PostMessage", new { id = message.Id }, message);
         }
     }
 }

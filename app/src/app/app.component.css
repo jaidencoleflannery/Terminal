@@ -1,0 +1,13 @@
+.layout {
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+}
+
+.layout * {
+    flex: 1;
+}
+
+app-body {
+    min-width: 50vw;
+}

@@ -9,9 +9,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    width: 100vw;
     background-color: var(--background-color);
     padding: 2rem;
+    height: 6vh;
+}
+
+.nav {
+    position: relative;
 }
 
 .nav ul {
@@ -24,3 +29,31 @@
     color: var(--text-color);
     transition: color var(--transition-speed);
 }
+
+.summaries {
+    flex-direction: column;
+    position: absolute;
+    width: 18rem;
+    height: 100vh;
+    overflow: auto;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: pink;
+}
+
+.summary-line {
+    display: flex;
+    flex-grow: 1;
+    height: 4rem;
+    background-color: green;
+    border-bottom: 1px solid white;
+}
+
+.visible {
+    display: flex;
+}
+
+.hidden {
+    display: none;
+}
+

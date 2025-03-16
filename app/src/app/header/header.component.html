@@ -3,7 +3,7 @@
     <header class="header">
         <div class="nav">
             <ul>
-                <li class="icon"><a href="#"><img src="icons/team.svg"></a></li>
+                <li class="icon"><img src="icons/team.svg" (click)=(showSummaries())></li>
             </ul>
         </div>
         <nav class="nav">
@@ -13,3 +13,4 @@
         </nav>
     </header>
 </div>
+<app-body [summariesActive]="summariesActive" [profileActive]="profileActive"></app-body>
