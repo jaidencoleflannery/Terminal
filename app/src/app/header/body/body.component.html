@@ -1,11 +1,12 @@
 <div class="homepage">
-    <app-summaries></app-summaries>
+    <app-summaries [isActive]="summariesActive"></app-summaries>
     <div id="terminal" (click)="focusInput()">
         <form id="task-form" [formGroup]="form" (ngSubmit)="submit()">
-            <span>></span><input type="text" #valueInput formControlName="value">
+            <span id="marker">></span><input type="text" #valueInput formControlName="value">
             <button type="submit">↵</button>
         </form>
     </div>  
-    <app-profile></app-profile>
+    <app-profile [isActive]="profileActive"></app-profile>
 </div>
   
+

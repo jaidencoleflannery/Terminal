@@ -9,5 +9,9 @@ import { CommonModule } from '@angular/common';
   styleUrl: './summaries.component.css'
 })
 export class SummariesComponent {
-  @Input() active!: boolean;
+  @Input() isActive!: boolean;
+
+  navPop() {
+    this.isActive = !this.isActive;
+  }
 }

@@ -15,9 +15,11 @@ export class HeaderComponent {
 
   async showSummaries(){
     this.summariesActive = !this.summariesActive;
+    console.log(this.summariesActive);
   }
 
   async showProfile(){
     this.profileActive = !this.profileActive;
+    console.log(this.profileActive);
   }
 }
