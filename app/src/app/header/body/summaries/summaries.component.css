@@ -12,7 +12,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 1.2rem;
-    border-radius: 1rem;
+    border-radius: var(--curve);
     margin: 0.6rem;
 }
 
@@ -23,12 +23,11 @@
 
 #new-conversation {
     justify-content: flex-start;
-    border-radius: 1rem;
+    border-radius: var(--curve);
     height: 3.4rem;
     width: 100%;
     display: flex;
     padding: 1.2rem;
-    border-radius: 1rem;
     margin: 0.6rem;
 }
 

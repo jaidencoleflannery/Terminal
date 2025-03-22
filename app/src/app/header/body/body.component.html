@@ -2,11 +2,9 @@
     <app-summaries [isActive]="summariesActive"></app-summaries>
     <div id="terminal" (click)="focusInput()">
         <form id="task-form" [formGroup]="form" (ngSubmit)="submit()">
-            <span id="marker">></span><input type="text" #valueInput formControlName="value">
-            <button type="submit">↵</button>
+            <textarea id="input" type="text" #valueInput formControlName="value" (keydown)="handleEnter($event)" (keyup)="dynamicInput(valueInput)"></textarea>
+            <button type="submit"></button>
         </form>
     </div>  
     <app-profile [isActive]="profileActive"></app-profile>
 </div>
-  
-

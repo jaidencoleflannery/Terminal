@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, ViewEncapsulation, Input } from '@angular/core';
+import { Component, ElementRef, ViewChild, ViewEncapsulation, Input, OnInit} from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormBuilder } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SummariesComponent } from "./summaries/summaries.component";
@@ -12,7 +12,7 @@ import { ProfileComponent } from "./profile/profile.component";
   styleUrl: './body.component.css',
   encapsulation: ViewEncapsulation.None,
 })
-export class BodyComponent{
+export class BodyComponent implements OnInit{
 
   @Input() summariesActive!: boolean;
   @Input() profileActive!: boolean;
@@ -27,10 +27,27 @@ export class BodyComponent{
     });
   }
 
+  ngOnInit(): void {
+    this.focusInput();
+  }
+
   @ViewChild('valueInput') valueInput!: ElementRef<HTMLInputElement>;
 
   focusInput(): void {
     this.valueInput.nativeElement.focus();
+  }
+
+  dynamicInput(textarea: any): void {
+      textarea.style.height = "auto";
+      textarea.style.height = textarea.scrollHeight + "px";
+      console.log(textarea);
+  }
+
+  handleEnter(event: KeyboardEvent): void {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.submit();
+    }
   }
 
   async submit () {
