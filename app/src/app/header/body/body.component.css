@@ -23,8 +23,8 @@
   #task-form {
   display: flex;
   flex-basis: fit-content;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
   flex-direction: row;
   width: 100%;
   height: fit-content;
@@ -36,7 +36,12 @@
 #task-form textarea {
   height: fit-content;
   max-height: 36vh;
-  padding: 1rem;
+  padding: 0;
+  padding-left: 0.2rem;
+  padding-right: 1rem;
+  margin: 0;
+  margin-left: 1rem;
+  margin-left: 1rem;
   background-color: rgba(0, 0, 0, 0);
   color: var(--text-color);
   border: none;
@@ -44,6 +49,14 @@
   overflow-wrap: break-word;
   font-size: var(--text-size);
   resize: none;
+}
+
+#prompt {
+  display: flex;
+  max-width: fit-content;
+  height: 100%;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
 #task-form:hover {

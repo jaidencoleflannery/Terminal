@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, ViewEncapsulation, Input, OnInit} from '@angular/core';
+import { Component, ElementRef, ViewChild, ViewEncapsulation, Input, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormBuilder } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SummariesComponent } from "./summaries/summaries.component";
@@ -16,12 +16,14 @@ export class BodyComponent implements OnInit{
 
   @Input() summariesActive!: boolean;
   @Input() profileActive!: boolean;
+  @ViewChild('valueInput') valueInput!: ElementRef<HTMLInputElement>;
+
+  newConversation: boolean = false;
 
   value: any;
   form: any;
 
   constructor (private fb: FormBuilder) {
-
     this.form = this.fb.group({
       value: ''
     });
@@ -31,8 +33,6 @@ export class BodyComponent implements OnInit{
     this.focusInput();
   }
 
-  @ViewChild('valueInput') valueInput!: ElementRef<HTMLInputElement>;
-
   focusInput(): void {
     this.valueInput.nativeElement.focus();
   }
@@ -40,13 +40,13 @@ export class BodyComponent implements OnInit{
   dynamicInput(textarea: any): void {
       textarea.style.height = "auto";
       textarea.style.height = textarea.scrollHeight + "px";
-      console.log(textarea);
   }
 
-  handleEnter(event: KeyboardEvent): void {
+  handleEnter(event: KeyboardEvent, textarea: any): void {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       this.submit();
+      this.dynamicInput(textarea);
     }
   }
 
@@ -76,5 +76,14 @@ export class BodyComponent implements OnInit{
       );
       return null;
     }
+  }
+
+  createConversation () {
+    this.newConversation = true;
+    this.form.reset(
+      this.value = ''
+    );
+    this.focusInput();
+    return null;
   }
 }
