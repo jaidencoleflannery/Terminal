@@ -11,6 +11,7 @@ namespace Controllers.ConversationController {
 
         private readonly ApplicationDbContext _context;
         public static List<Messages> Messages = new List<Messages>();
+        public static List<Summaries> Summaries = new List<Summaries>();
 
         private readonly ILogger<ConversationController> _logger;
 
@@ -20,7 +21,7 @@ namespace Controllers.ConversationController {
             _context = context;
         }
 
-        [HttpPost("/get", Name = "GetMessages")]
+        [HttpPost("/get", Name = "GetConversation")]
         public List<Messages> Get()
         {
             Console.WriteLine(Messages);
@@ -36,6 +37,17 @@ namespace Controllers.ConversationController {
             await _context.Messages.AddAsync(message);
             await _context.SaveChangesAsync();
             return CreatedAtRoute("PostMessage", new { id = message.Id }, message);
+        }
+
+        [HttpPost("/summary", Name = "PostSummary")]
+        public async Task<IActionResult> Post([FromBody] Summaries summary)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest(ModelState);
+            }
+            await _context.Summaries.AddAsync(summary);
+            await _context.SaveChangesAsync();
+            return CreatedAtRoute("PostMessage", new { id = summary.Id, userid = summary.UserId, title = summary.Title, instruction = summary.Instructions});
         }
     }
 }

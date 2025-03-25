@@ -1,6 +1,6 @@
 <div class="summaries" [ngClass]="isActive ? 'visible' : 'hidden'">
     <ul>
-        <li id="new-conversation"><div class="value">+</div></li>
+        <li #newConversation id="new-conversation"><div class="value" (click)="createConversation()">+</div></li>
         <li class="summary-line"><div class="value">Inquiries on love lost.</div><div class="date">02.14.2002</div></li>
     </ul>
 </div>
