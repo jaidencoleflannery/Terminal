@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models;
 using Data;
 
-namespace Controllers.ConversationController {
+namespace Controllers.ConversationController;
     [ApiController]
     [Route("/conversation")]
     public class ConversationController : ControllerBase
@@ -50,4 +50,3 @@ namespace Controllers.ConversationController {
             return CreatedAtRoute("PostMessage", new { id = summary.Id, userid = summary.UserId, title = summary.Title, instruction = summary.Instructions});
         }
     }
-}

@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 
-namespace Data
-{
+namespace Data;
     public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -13,4 +12,3 @@ namespace Data
         public DbSet<Sources> Sources { get; set; }
         public DbSet<Summaries> Summaries { get; set; }
     }
-}
