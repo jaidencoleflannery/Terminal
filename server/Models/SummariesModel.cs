@@ -1,11 +1,6 @@
-using System;
-using Models;
-using Data;
-
-namespace Models {
+namespace Models;
     public class Summaries {
         public int Id { get; set; }
-
         public int UserId { get; set; }
         public string? Title { get; set; }
         public string? Instructions { get; set; }
@@ -13,4 +8,3 @@ namespace Models {
         public virtual ICollection<Sources> Sources { get; set; } = new List<Sources>();
         public virtual ICollection<Messages> Messages { get; set; } = new List<Messages>();
     }
-}

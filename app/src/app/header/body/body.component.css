@@ -20,6 +20,17 @@
     border-radius: var(--curve);
   }
 
+  app-profile {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    height: 100%;
+    width: 100%;
+    color: var(--text-color);
+    font-size: var(--text-size);
+    text-align: end;
+}
+
   #task-form {
   display: flex;
   flex-basis: fit-content;
