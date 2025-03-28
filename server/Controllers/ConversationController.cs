@@ -12,7 +12,6 @@ namespace Controllers.ConversationController;
         private readonly ApplicationDbContext _context;
         public static List<Messages> Messages = new List<Messages>();
         public static List<Summaries> Summaries = new List<Summaries>();
-
         private readonly ILogger<ConversationController> _logger;
 
         public ConversationController(ILogger<ConversationController> logger, ApplicationDbContext context)

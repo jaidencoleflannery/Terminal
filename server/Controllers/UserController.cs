@@ -1,24 +1,31 @@
-using Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using Models;
+using Data;
 
 namespace Controllers.UserController {
     [ApiController]
-    [Route("/user")]
+    [Route("/auth")]
     public class userController : ControllerBase {
 
-        private readonly IUserService _userService;
+        private readonly ApplicationDbContext _dbcontext;
 
-        public userController( IUserService userService ) {
-            _userService = userService;
+        public userController( ApplicationDbContext dbcontext) {
+            _dbcontext = dbcontext;
         }
 
-        [HttpPost("/getUser", Name = "GetUser")]
-        public string GetUser() {
-            Console.WriteLine("Getting user");
-            string user = _userService.GetUser();
-            return user;
+        //lookup usermanager and use that below
+
+        [HttpPost("/newUser", Name = "NewUser")]
+        public async Task<IActionResult> Post([FromBody] IdentityUser user)
+        {
+            if (!ModelState.IsValid) {
+                return BadRequest(ModelState);
+            }
+            await _dbcontext.Set<IdentityUser>().AddAsync(user);
+            await _dbcontext.SaveChangesAsync();
+            return CreatedAtRoute("PostMessage", new { id = user.Id }, user);
         }
     }
-
-
 }
