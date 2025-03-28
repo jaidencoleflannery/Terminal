@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,6 +8,22 @@ import { CommonModule } from '@angular/common';
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
-export class ProfileComponent {
-  @Input() isActive!: boolean;
+export class ProfileComponent implements OnInit {
+    @Input() isActive!: boolean;
+  
+    ngOnInit(): void {
+      this.getUserInfo();
+    }
+  
+    navPop() {
+      this.isActive = !this.isActive;
+    }
+  
+    getUserInfo(){
+      console.log('Implement user info');
+    }
+
+    register(){
+      console.log('Implement register');
+    }
 }
