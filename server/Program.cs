@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Microsoft.Extensions.DependencyInjection;
 using Data;
 using Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +29,11 @@ builder.Services.AddCors(options =>
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => 
+    options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 

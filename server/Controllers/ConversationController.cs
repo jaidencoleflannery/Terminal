@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models;
 using Data;
 
-namespace Controllers.ConversationController {
+namespace Controllers.ConversationController;
     [ApiController]
     [Route("/conversation")]
     public class ConversationController : ControllerBase
@@ -12,7 +12,6 @@ namespace Controllers.ConversationController {
         private readonly ApplicationDbContext _context;
         public static List<Messages> Messages = new List<Messages>();
         public static List<Summaries> Summaries = new List<Summaries>();
-
         private readonly ILogger<ConversationController> _logger;
 
         public ConversationController(ILogger<ConversationController> logger, ApplicationDbContext context)
@@ -50,4 +49,3 @@ namespace Controllers.ConversationController {
             return CreatedAtRoute("PostMessage", new { id = summary.Id, userid = summary.UserId, title = summary.Title, instruction = summary.Instructions});
         }
     }
-}
