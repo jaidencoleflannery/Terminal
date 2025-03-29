@@ -1,6 +1,37 @@
 <div class="profile" [ngClass]="isActive ? 'visible' : 'hidden'">
     <ul>
-        <li class="user-info">Account</li>
-        <li class="user-info">Date</li>
+        <li class="user-info" (click)="settingsPop()">Settings</li>
+        <div class="account" [ngClass]="settingsActive ? 'visible' : 'hidden'">
+            <ul>
+                <li class="user-info" (click)="settingsPop()"><</li>
+                <li class="user-info" (click)="accountPop()">Profile</li>
+                    <div class="account" [ngClass]="accountActive ? 'visible' : 'hidden'">
+                        <ul>
+                            <li class="user-info" (click)="accountPop()"><</li>
+                            <li class="user-info">Username</li>
+                            <li class="user-info">Change Password</li>
+                            <li class="user-info">Change Email</li>
+                        </ul>
+                    </div>
+                <li class="user-info" (click)="credPop()">Credentials</li>
+                    <div class="account" [ngClass]="credActive ? 'visible' : 'hidden'">
+                        <ul>
+                            <li class="user-info" (click)="credPop()"><</li>
+                            <li class="user-info">ChatGPT:</li>
+                            <li class="user-info">Claude:</li>
+                            <li class="user-info">Grok:</li>
+                        </ul>
+                    </div>
+                <li class="user-info" (click)="subPop()">Subscription</li>
+                <div class="account" [ngClass]="subActive ? 'visible' : 'hidden'">
+                    <ul>
+                        <li class="user-info" (click)="subPop()"><</li>
+                        <li class="user-info">Subscribe for ease-of-access</li>
+                    </ul>
+                </div>
+                <li class="user-info">Logout</li>
+            </ul>
+        </div>
+        <li class="user-info">Logout</li>
     </ul>
 </div>

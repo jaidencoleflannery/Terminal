@@ -1,4 +1,5 @@
 .profile {
+    position: relative;
     padding: 1rem;
     height: 100%;
     max-width: 12rem;
@@ -7,22 +8,45 @@
     font-weight: light;
     font-size: var(--text-size);
     overflow: hidden;
-}
-
-.user-info {
+  }
+  
+  .user-info {
     display: flex;
+    max-width: fit-content;
     align-items: flex-end;
     padding: 1.2rem;
     border-radius: var(--curve);
     margin: 0.6rem;
-}
-
-.user-info:hover {
+  }
+  
+  .user-info:hover {
     background-color: var(--body-bg);
     cursor: pointer;
-}
-
-.user-info li{
+  }
+  
+  .user-info li {
     text-align: end;
     background-color: aquamarine;
-}
+  }
+  
+  .account {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 48vw;
+    height: 100vh;
+    padding: 4rem;
+    border: 2px solid var(--border-color);
+    z-index: 9999;
+    background-color: var(--background-color);
+  }
+
+  .visible {
+    display: block;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  

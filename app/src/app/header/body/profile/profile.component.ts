@@ -10,6 +10,10 @@ import { CommonModule } from '@angular/common';
 })
 export class ProfileComponent implements OnInit {
     @Input() isActive!: boolean;
+    accountActive: boolean = false;
+    settingsActive: boolean = false;
+    credActive: boolean = false;
+    subActive: boolean = false;
   
     ngOnInit(): void {
       this.getUserInfo();
@@ -17,6 +21,18 @@ export class ProfileComponent implements OnInit {
   
     navPop() {
       this.isActive = !this.isActive;
+    }
+    accountPop() {
+      this.accountActive = !this.accountActive;
+    }
+    settingsPop() {
+      this.settingsActive = !this.settingsActive;
+    }
+    credPop() {
+      this.credActive = !this.credActive;
+    }
+    subPop() {
+      this.subActive = !this.subActive;
     }
   
     getUserInfo(){
