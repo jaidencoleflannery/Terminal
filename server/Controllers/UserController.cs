@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication;
 using Models;
 using Data;
 
@@ -11,14 +12,15 @@ namespace Controllers.UserController {
 
         private readonly ApplicationDbContext _dbcontext;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
-        public userController(UserManager<IdentityUser> userManager, ApplicationDbContext dbcontext) {
+        public userController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ApplicationDbContext dbcontext) {
             _userManager = userManager;
+            _signInManager = signInManager;
             _dbcontext = dbcontext;
         }
 
-
-        [HttpPost("/register", Name = "Register")]
+        [HttpPost("register", Name = "Register")]
         public async Task<IActionResult> Post([FromBody] Registrations dto)
         {
             if (!ModelState.IsValid) {
@@ -35,6 +37,27 @@ namespace Controllers.UserController {
                 }
                 return CreatedAtRoute("PostMessage", new { id = user.Id }, user);
             }
+        }
+
+        [HttpPost("login", Name = "Login")]
+        public async Task<IActionResult> Post([FromBody] Users dto)
+        {
+            var result = await _signInManager.PasswordSignInAsync(
+                dto.Username,
+                dto.Password,
+                isPersistent: false,
+                lockoutOnFailure: false
+            );
+            if (result.Succeeded)
+            {
+                var user = await _userManager.FindByNameAsync(dto.Username);
+                var principal = await _signInManager.CreateUserPrincipalAsync(user);
+                await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, principal);
+            } else {
+                return Unauthorized();
+            }
+
+            return Ok("User logged in successfully.");
         }
     }
 }
