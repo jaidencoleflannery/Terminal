@@ -2,22 +2,27 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+
 using Models;
 using Data;
 
 namespace Controllers.UserController {
     [ApiController]
     [Route("/auth")]
+    [Authorize]
     public class userController : ControllerBase {
 
         private readonly ApplicationDbContext _dbcontext;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly ILogger<userController> _logger;
 
-        public userController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ApplicationDbContext dbcontext) {
+        public userController(ILogger<userController> logger, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ApplicationDbContext dbcontext) {
             _userManager = userManager;
             _signInManager = signInManager;
             _dbcontext = dbcontext;
+            _logger = logger;
         }
 
         [HttpPost("register", Name = "Register")]
@@ -58,6 +63,12 @@ namespace Controllers.UserController {
             }
 
             return Ok("User logged in successfully.");
+        }
+
+        [HttpGet("check", Name = "Check")]
+        public async Task<IActionResult> Get()
+        {
+            return Ok("Authenticated");
         }
     }
 }

@@ -1,11 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Models;
 using Data;
 
 namespace Controllers.ConversationController;
     [ApiController]
     [Route("/conversation")]
+    [Authorize]
     public class ConversationController : ControllerBase
     {
 
