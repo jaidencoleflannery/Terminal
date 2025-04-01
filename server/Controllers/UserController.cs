@@ -2,15 +2,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 using Models;
 using Data;
 
-namespace Controllers.UserController {
+namespace Controllers.UserController 
+{
     [ApiController]
     [Route("/auth")]
-    [Authorize]
     public class userController : ControllerBase {
 
         private readonly ApplicationDbContext _dbcontext;
@@ -31,11 +32,11 @@ namespace Controllers.UserController {
             if (!ModelState.IsValid) {
                 return BadRequest(ModelState);
             }
-            var userExists = await _userManager.FindByNameAsync(dto.UserName);
+            var userExists = await _userManager.FindByNameAsync(dto.Username);
             if (userExists != null) {
                 return BadRequest("User already exists.");
             } else{
-                var user = new IdentityUser { UserName = dto.UserName };
+                var user = new IdentityUser { UserName = dto.Username };
                 var result = await _userManager.CreateAsync(user, dto.Password);
                 if (!result.Succeeded) {
                     return BadRequest(result.Errors);
@@ -68,7 +69,11 @@ namespace Controllers.UserController {
         [HttpGet("check", Name = "Check")]
         public async Task<IActionResult> Get()
         {
-            return Ok("Authenticated");
+            if(HttpContext.User.Identity.IsAuthenticated == false) {
+                return Unauthorized();
+            } else {
+                return Ok("Authenticated");
+            }
         }
     }
 }
