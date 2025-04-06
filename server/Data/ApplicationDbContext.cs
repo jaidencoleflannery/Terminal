@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Models;
+using Models.UsersModel;
+using Models.MessagesModel;
+using Models.ConversationsModel;
 
 namespace Data;
     public class ApplicationDbContext : IdentityDbContext
@@ -9,7 +11,8 @@ namespace Data;
             : base(options)
         {
         }
+
+        public DbSet<Users> Users { get; set; }
         public DbSet<Messages> Messages { get; set; }
-        public DbSet<Sources> Sources { get; set; }
-        public DbSet<Summaries> Summaries { get; set; }
+        public DbSet<Conversations> Conversations { get; set; }
     }

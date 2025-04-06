@@ -7,7 +7,3 @@
 .layout * {
     flex: 1;
 }
-
-app-body {
-    min-width: 50vw;
-}

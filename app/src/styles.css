@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 :root {
-    --background-color: #000000;
+    --background-color: #1f2020;
     --text-color: #ffffff;
-    --placeholder-color: #484848;
-    --body-bg: #0b0b0b;
-    --border-color: #0b0b0b;
-    --font-family: "Arial", sans-serif;
+    --placeholder-color: #3c3c3c;
+    --body-bg: #3c3c3c;
+    --border-color: #3c3c3c;
+    --font-family: "Roboto", sans-serif;
     --text-size: 1.25rem;
     --transition-speed: 0.3s;
     --curve: 1.2rem;
@@ -18,6 +18,10 @@
     box-sizing: border-box;
     outline: none;
 
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer and Edge */
+    overflow: -moz-scrollbars-none; /* Old versions of Firefox */
+
     /* disabling text selection */
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
@@ -26,6 +30,17 @@
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
+}
+
+*::-webkit-scrollbar {
+    display: none;
+}
+
+html {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
 body {
@@ -37,6 +52,7 @@ body {
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    max-width: 100vw;
 }
 
 .icon img {

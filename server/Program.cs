@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
-using Microsoft.Extensions.DependencyInjection;
 using Data;
-using Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using Services.ConversationsService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +13,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IConversationsService, ConversationsService>();
 
 builder.Services.AddCors(options =>
 {

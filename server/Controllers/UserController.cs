@@ -5,7 +5,10 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
-using Models;
+using Models.UsersModel;
+using Models.ConversationsModel;
+using Services.ConversationsService;
+using Models.RegistrationsModel;
 using Data;
 
 namespace Controllers.UserController 
@@ -18,12 +21,14 @@ namespace Controllers.UserController
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<userController> _logger;
+        private readonly ConversationsService _conversations;
 
-        public userController(ILogger<userController> logger, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ApplicationDbContext dbcontext) {
+        public userController(ILogger<userController> logger, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ApplicationDbContext dbcontext, ConversationsService conversations) {
             _userManager = userManager;
             _signInManager = signInManager;
             _dbcontext = dbcontext;
             _logger = logger;
+            _conversations = conversations;
         }
 
         [HttpPost("register", Name = "Register")]
@@ -61,6 +66,14 @@ namespace Controllers.UserController
                 await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, principal);
             } else {
                 return Unauthorized();
+            }
+
+            var userInfo = await _userManager.GetUserAsync(User);
+            var userId = userInfo?.Id;
+            if(userId != null) {
+                var conversations = _conversations.getConversations(userId);
+            } else {
+                Console.WriteLine("No conversations found for user ", userInfo?.UserName);
             }
 
             return Ok("User logged in successfully.");
