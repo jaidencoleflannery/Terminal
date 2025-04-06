@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Models;
+using Models.ConversationsModel;
 using Data;
 
 namespace Controllers.ConversationController;
@@ -13,7 +13,7 @@ namespace Controllers.ConversationController;
 
         private readonly ApplicationDbContext _context;
         public static List<Messages> Messages = new List<Messages>();
-        public static List<Summaries> Summaries = new List<Summaries>();
+        public static List<Conversations> Conversations = new List<Conversations>();
         private readonly ILogger<ConversationController> _logger;
 
         public ConversationController(ILogger<ConversationController> logger, ApplicationDbContext context)
@@ -41,12 +41,12 @@ namespace Controllers.ConversationController;
         }
 
         [HttpPost("/summary", Name = "PostSummary")]
-        public async Task<IActionResult> Post([FromBody] Summaries summary)
+        public async Task<IActionResult> Post([FromBody] Conversation summary)
         {
             if (!ModelState.IsValid) {
                 return BadRequest(ModelState);
             }
-            await _context.Summaries.AddAsync(summary);
+            await _context.Conversation.AddAsync(summary);
             await _context.SaveChangesAsync();
             return CreatedAtRoute("PostMessage", new { id = summary.Id, userid = summary.UserId, title = summary.Title, instruction = summary.Instructions});
         }

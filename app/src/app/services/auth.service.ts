@@ -15,15 +15,17 @@ export class AuthService {
 
   async checkAuth() {
     try {
-      const response = await fetch('http://localhost:5246/auth/check');
+      const response = await fetch('http://localhost:5246/auth/check', {
+        credentials: 'include' // ensures cookies are sent with the request
+      });
       if (!response.ok) {
-        throw new Error('Not authenticated.');
+        throw new Error('Not authenticated');
       }
     } catch (error) {
-      console.error(error);
       this.isAuthenticatedSubject.next(false);
       return false;
     }
+    this.isAuthenticatedSubject.next(true);
     return true;
   }
 }
