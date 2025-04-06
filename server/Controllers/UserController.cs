@@ -21,9 +21,9 @@ namespace Controllers.UserController
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<userController> _logger;
-        private readonly ConversationsService _conversations;
+        private readonly IConversationsService _conversations;
 
-        public userController(ILogger<userController> logger, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ApplicationDbContext dbcontext, ConversationsService conversations) {
+        public userController(ILogger<userController> logger, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ApplicationDbContext dbcontext, IConversationsService conversations) {
             _userManager = userManager;
             _signInManager = signInManager;
             _dbcontext = dbcontext;
@@ -71,18 +71,18 @@ namespace Controllers.UserController
             var userInfo = await _userManager.GetUserAsync(User);
             var userId = userInfo?.Id;
             if(userId != null) {
-                var conversations = _conversations.getConversations(userId);
+                var conversations = _conversations.GetConversations(userId);
             } else {
-                Console.WriteLine("No conversations found for user ", userInfo?.UserName);
+                Console.WriteLine("User Id not found");
             }
 
             return Ok("User logged in successfully.");
         }
 
-        [HttpGet("check", Name = "Check")]
+        [HttpGet]
         public async Task<IActionResult> Get()
         {
-            if(HttpContext.User.Identity.IsAuthenticated == false) {
+            if(User.Identity.IsAuthenticated == false) {
                 return Unauthorized();
             } else {
                 return Ok("Authenticated");
