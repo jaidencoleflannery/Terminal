@@ -1,14 +1,10 @@
 using Models.ConversationsModel;
+using Microsoft.AspNetCore.Identity;
 
 namespace Models.UsersModel;
 
-    public class Users {
-        public required int Id { get; set; }
-        public required string Username { get; set; }
-        public string? Email { get; set; }
-        public required string Password { get; set; }
+    public class Users : IdentityUser {
+        public string Password { get; set; } // Used only during login
         public virtual ICollection<Conversations> Conversations { get; set; } 
         = new List<Conversations>();
     }
-
-    // YOU NEED TO WRAP THIS INTO IDENTITY USER FOR LITERALLY ANYTHING TO WORK
