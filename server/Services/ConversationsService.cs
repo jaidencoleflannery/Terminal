@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using Models.MessagesModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Services.ConversationsService;
 public class ConversationsService : IConversationsService {
@@ -27,11 +28,11 @@ public class ConversationsService : IConversationsService {
         _logger.LogInformation($"Successfully grabbed conversations for user: {Id}");
         return results;
     }
-    public void CreateConversations(Messages message, int userId) {
+    public async Task<int> CreateConversations(Messages message, int userId) {
         Conversations conversation = new Conversations(userId);
         _context.Conversations.Add(conversation);
-        _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
         _logger.LogInformation($"Successfully created new conversation with message: {message}");
-        // this needs to return the conversation id somehow so the frontend knows what to send on its next request
+        return conversation.Id;
     }
 }

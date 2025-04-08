@@ -1,14 +1,10 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
-
-using Models.UsersModel;
-using Models.ConversationsModel;
 using Services.ConversationsService;
 using Models.RegistrationsModel;
+using Models.UsersModel;
+
 using Data;
 
 namespace Controllers.UserController 

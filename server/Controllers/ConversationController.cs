@@ -1,24 +1,22 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Services.ConversationsService;
 using Models.ConversationsModel;
+using System.Security.Claims;
 using Models.MessagesModel;
 using Data;
-using Services.ConversationsService;
 
 namespace Controllers.ConversationController;
     [ApiController]
     [Route("/conversation")]
     [Authorize]
-    public class ConversationController : ControllerBase
-    {
+    public class ConversationController : ControllerBase {
 
         private readonly ApplicationDbContext _context;
         public static List<string> Messages = new List<string>();
         public static List<Conversations> Conversations = new List<Conversations>();
         private readonly ILogger<ConversationController> _logger;
         private readonly IConversationsService _conversationsService;
-
         public ConversationController(ILogger<ConversationController> logger, ApplicationDbContext context, IConversationsService conversationsService)
         {
             _logger = logger;
@@ -40,7 +38,7 @@ namespace Controllers.ConversationController;
                 return BadRequest(ModelState);
             }
             if(!isNew) {
-                var conversation = await _context.Conversations.FindAsync(message.conversationId);
+                var conversation = await _context.Conversations.FindAsync(message.ConversationsId);
                 if(conversation == null){
                     return NotFound($"Conversation {message.conversationId} not found");
                 }
@@ -48,7 +46,7 @@ namespace Controllers.ConversationController;
                 await _context.SaveChangesAsync();
                 return CreatedAtRoute("PostMessage", new { id = message.Id }, message);
             } else {
-                var conversation = _conversationsService.CreateConversations(message);
+                var conversation = await _conversationsService.CreateConversations(message, Int32.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value));
                 return CreatedAtRoute("PostMessage", new {id = conversation}, "conversation");
             }
         }

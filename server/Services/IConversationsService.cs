@@ -6,5 +6,5 @@ namespace Services.ConversationsService;
     public interface IConversationsService
     {
         public List<Conversations> GetConversations(string id);
-        public void CreateConversations(Messages message, int userId);
+        public Task<int> CreateConversations(Messages message, int userId);
     }
