@@ -5,6 +5,6 @@ using System.Collections.Generic;
 namespace Services.ConversationsService;
     public interface IConversationsService
     {
-        public List<Conversations> GetConversations(string id);
-        public Task<int> CreateConversations(Messages message, int userId);
+        public List<Conversations> GetConversations(string userId);
+        Task<int> CreateConversations(Messages message, string userId);
     }

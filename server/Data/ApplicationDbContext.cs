@@ -19,7 +19,7 @@ namespace Data;
                 .HasMany(u => u.Conversations)
                 .WithOne(c => c.Users)
                 .HasForeignKey(c => c.UsersId)
-                .OnDelete(DeleteBehavior.Cascade); // optional: defines what happens on user deletion
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         public DbSet<Users> Users { get; set; }

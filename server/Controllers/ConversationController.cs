@@ -24,14 +24,14 @@ namespace Controllers.ConversationController;
             _conversationsService = conversationsService;
         }
 
-        [HttpPost("/get", Name = "GetConversation")]
+        [HttpPost("get", Name = "GetConversation")]
         public List<string> Get()
         {
             Console.WriteLine(Messages);
             return Messages;
         }
 
-        [HttpPost("/message", Name = "PostMessage")]
+        [HttpPost("message", Name = "PostMessage")]
         public async Task<IActionResult> Post([FromBody] Messages message, bool isNew)
         {
             if (!ModelState.IsValid) {
@@ -40,14 +40,19 @@ namespace Controllers.ConversationController;
             if(!isNew) {
                 var conversation = await _context.Conversations.FindAsync(message.ConversationsId);
                 if(conversation == null){
-                    return NotFound($"Conversation {message.conversationId} not found");
+                    return NotFound($"Conversation {message.ConversationsId} not found");
                 }
                 conversation.Messages.Add(message);
                 await _context.SaveChangesAsync();
                 return CreatedAtRoute("PostMessage", new { id = message.Id }, message);
             } else {
-                var conversation = await _conversationsService.CreateConversations(message, Int32.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value));
-                return CreatedAtRoute("PostMessage", new {id = conversation}, "conversation");
+                try{
+                    var conversation = await _conversationsService.CreateConversations(message, User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                    return CreatedAtRoute("PostMessage", new {id = conversation}, "conversation");
+                }
+                catch (Exception error) {
+                    return StatusCode(500, $"Internal server error: {error.Message}");
+                }
             }
         }
     }

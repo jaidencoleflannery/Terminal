@@ -19,7 +19,7 @@ namespace Controllers.UserController
         private readonly ILogger<userController> _logger;
         private readonly IConversationsService _conversations;
 
-        public userController(ILogger<userController> logger, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ApplicationDbContext dbcontext, ConversationsService conversations) {
+        public userController(ILogger<userController> logger, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ApplicationDbContext dbcontext, IConversationsService conversations) {
             _userManager = userManager;
             _signInManager = signInManager;
             _dbcontext = dbcontext;
