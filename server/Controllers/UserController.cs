@@ -1,14 +1,10 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
-
-using Models.UsersModel;
-using Models.ConversationsModel;
 using Services.ConversationsService;
 using Models.RegistrationsModel;
+using Models.UsersModel;
+
 using Data;
 
 namespace Controllers.UserController 
@@ -21,7 +17,7 @@ namespace Controllers.UserController
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<userController> _logger;
-        private readonly ConversationsService _conversations;
+        private readonly IConversationsService _conversations;
 
         public userController(ILogger<userController> logger, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ApplicationDbContext dbcontext, ConversationsService conversations) {
             _userManager = userManager;
@@ -54,14 +50,14 @@ namespace Controllers.UserController
         public async Task<IActionResult> Post([FromBody] Users dto)
         {
             var result = await _signInManager.PasswordSignInAsync(
-                dto.Username,
+                dto.UserName,
                 dto.Password,
                 isPersistent: false,
                 lockoutOnFailure: false
             );
             if (result.Succeeded)
             {
-                var user = await _userManager.FindByNameAsync(dto.Username);
+                var user = await _userManager.FindByNameAsync(dto.UserName);
                 var principal = await _signInManager.CreateUserPrincipalAsync(user);
                 await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, principal);
             } else {
@@ -69,11 +65,10 @@ namespace Controllers.UserController
             }
 
             var userInfo = await _userManager.GetUserAsync(User);
-            var userId = userInfo?.Id;
-            if(userId != null) {
-                var conversations = _conversations.getConversations(userId);
+            if(userInfo != null) {
+                var conversations = _conversations.GetConversations(userInfo.Id);
             } else {
-                Console.WriteLine("No conversations found for user ", userInfo?.UserName);
+                Console.WriteLine("User Id not found");
             }
 
             return Ok("User logged in successfully.");

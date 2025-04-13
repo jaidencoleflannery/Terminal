@@ -1,12 +1,19 @@
 using Microsoft.AspNetCore.Components.Web;
+using Models.UsersModel;
+using Models.MessagesModel;
 
 namespace Models.ConversationsModel;
     public class Conversations {
+        public Conversations(int UsersId) {
+            this.UsersId = UsersId;
+        }
         public int Id { get; set; }
-        public int UserId { get; set; }
         public string? Title { get; set; }
         public string? Instructions { get; set; }
         public DateTime Date { get; set; }
         public virtual ICollection<Sources> Sources { get; set; } = new List<Sources>();
-        public virtual ICollection<Sources> Messages { get; set; } = new List<Sources>();
+        public virtual ICollection<Messages> Messages { get; set; } = new List<Messages>();
+
+        public int UsersId { get; set; }
+        public Users Users { get; set; }
     }
