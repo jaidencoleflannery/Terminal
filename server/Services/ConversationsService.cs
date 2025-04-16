@@ -1,7 +1,8 @@
 using Models.ConversationsModel;
-using Data;
-using Models.MessagesModel;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Models.MessagesModel;
+using Data;
 
 namespace Services.ConversationsService;
 public class ConversationsService : IConversationsService {
@@ -12,13 +13,16 @@ public class ConversationsService : IConversationsService {
         _logger = logger;
     }
     public List<Conversations> GetConversations(string userId) {
-        var results = _context.Conversations.Where(conversation => conversation.UsersId == userId).ToList();
-        Console.WriteLine(results);
+        List<Conversations> results = _context.Conversations
+            .Include(conversation => conversation.Messages)
+            .Where(conversation => conversation.UsersId == userId)
+            .ToList();
         _logger.LogInformation($"Successfully grabbed conversations for user: {userId}");
         return results;
     }
-    public async Task<int> CreateConversations(Messages message, string userId) {
-        Conversations conversation = new Conversations(userId);
+    public async Task<int> CreateConversations(MessagesDto dto, string userId) {
+        Messages message = new Messages { Value = dto.Value };
+        Conversations conversation = new Conversations(userId, message);
         _context.Conversations.Add(conversation);
         await _context.SaveChangesAsync();
         _logger.LogInformation($"Successfully created new conversation with message: {message}");

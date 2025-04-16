@@ -3736,11 +3736,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/coleflannery/Documents/Webdev/Projects/terminal/server/server.csproj",
+      "projectUniqueName": "/Users/coleflannery/Documents/Webdev/Projects/gotchi/server/server.csproj",
       "projectName": "server",
-      "projectPath": "/Users/coleflannery/Documents/Webdev/Projects/terminal/server/server.csproj",
+      "projectPath": "/Users/coleflannery/Documents/Webdev/Projects/gotchi/server/server.csproj",
       "packagesPath": "/Users/coleflannery/.nuget/packages/",
-      "outputPath": "/Users/coleflannery/Documents/Webdev/Projects/terminal/server/obj/",
+      "outputPath": "/Users/coleflannery/Documents/Webdev/Projects/gotchi/server/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/coleflannery/.nuget/NuGet/NuGet.Config"

@@ -4,8 +4,10 @@ using Models.MessagesModel;
 
 namespace Models.ConversationsModel;
     public class Conversations {
-        public Conversations(string UsersId) {
+        public Conversations() {}
+        public Conversations(string UsersId, Messages Message) {
             this.UsersId = UsersId;
+            Messages.Add(Message);
         }
         public int Id { get; set; }
         public string? Title { get; set; }
