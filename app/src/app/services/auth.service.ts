@@ -1,31 +1,34 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import { BehaviorSubject, Observable, filter } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  private isAuthenticatedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public isAuthenticated$: Observable<boolean> = this.isAuthenticatedSubject.asObservable();
+  private isAuthenticatedSubject = new BehaviorSubject<boolean | null>(null);
 
-  constructor() { 
+  public isAuthenticated$: Observable<boolean> =
+    this.isAuthenticatedSubject.asObservable()
+      .pipe(filter((val): val is boolean => val !== null));
+
+  constructor() {
     this.checkAuth();
   }
 
-  async checkAuth() {
+  async checkAuth(): Promise<boolean> {
     try {
-      const response = await fetch('http://localhost:5246/auth/check', {
-        credentials: 'include' // ensures cookies are sent with the request
+      const res = await fetch('http://localhost:5246/auth', {
+        credentials: 'include',
+        method: 'GET'
       });
-      if (!response.ok) {
-        throw new Error('Not authenticated');
-      }
-    } catch (error) {
+
+      if (!res.ok) throw new Error('unauth');
+      const { authenticated } = await res.json();
+      this.isAuthenticatedSubject.next(authenticated);
+      return authenticated;
+
+    } catch {
       this.isAuthenticatedSubject.next(false);
       return false;
     }
-    this.isAuthenticatedSubject.next(true);
-    return true;
   }
 }

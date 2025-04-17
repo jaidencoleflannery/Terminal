@@ -4,8 +4,10 @@ using Models.MessagesModel;
 
 namespace Models.ConversationsModel;
     public class Conversations {
-        public Conversations(int UsersId) {
+        public Conversations() {}
+        public Conversations(string UsersId, Messages Message) {
             this.UsersId = UsersId;
+            Messages.Add(Message);
         }
         public int Id { get; set; }
         public string? Title { get; set; }
@@ -14,6 +16,6 @@ namespace Models.ConversationsModel;
         public virtual ICollection<Sources> Sources { get; set; } = new List<Sources>();
         public virtual ICollection<Messages> Messages { get; set; } = new List<Messages>();
 
-        public int UsersId { get; set; }
+        public string UsersId { get; set; }
         public Users Users { get; set; }
     }

@@ -1,35 +1,28 @@
 using Models.ConversationsModel;
-using Models.UsersModel;
-using Data;
-using System.Runtime.CompilerServices;
-using Models.MessagesModel;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Models.MessagesModel;
+using Data;
 
 namespace Services.ConversationsService;
 public class ConversationsService : IConversationsService {
     private readonly ApplicationDbContext _context;
     private readonly ILogger<ConversationsService> _logger;
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly HttpContextAccessor _httpContextAccessor;
-    public ConversationsService(ApplicationDbContext context, ILogger<ConversationsService> logger, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, HttpContextAccessor httpContextAccessor) {
+    public ConversationsService(ApplicationDbContext context, ILogger<ConversationsService> logger) {
         _context = context;
         _logger = logger;
-        _userManager = userManager;
-        _httpContextAccessor = httpContextAccessor;
     }
-    // GetConversations takes the user Id as input
-    public List<Conversations> GetConversations(string Id) {
-        int val; 
-        Int32.TryParse( Id, out val );
-        var results = _context.Conversations.Where(conversation => conversation.UsersId == val).ToList();
-        Console.WriteLine(results);
-        _logger.LogInformation($"Successfully grabbed conversations for user: {Id}");
+    public List<Conversations> GetConversations(string userId) {
+        List<Conversations> results = _context.Conversations
+            .Include(conversation => conversation.Messages)
+            .Where(conversation => conversation.UsersId == userId)
+            .ToList();
+        _logger.LogInformation($"Successfully grabbed conversations for user: {userId}");
         return results;
     }
-    public async Task<int> CreateConversations(Messages message, int userId) {
-        Conversations conversation = new Conversations(userId);
+    public async Task<int> CreateConversations(MessagesDto dto, string userId) {
+        Messages message = new Messages { Value = dto.Value };
+        Conversations conversation = new Conversations(userId, message);
         _context.Conversations.Add(conversation);
         await _context.SaveChangesAsync();
         _logger.LogInformation($"Successfully created new conversation with message: {message}");

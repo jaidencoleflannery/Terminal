@@ -1,10 +1,9 @@
 using Models.ConversationsModel;
 using Models.MessagesModel;
-using System.Collections.Generic;
 
 namespace Services.ConversationsService;
     public interface IConversationsService
     {
-        public List<Conversations> GetConversations(string id);
-        public Task<int> CreateConversations(Messages message, int userId);
+        public List<Conversations> GetConversations(string userId);
+        public Task<int> CreateConversations(MessagesDto message, string userId);
     }

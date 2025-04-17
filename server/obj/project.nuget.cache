@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "BC0eliX4Hwv3+7GmbHyuSs7oS6rBbEeAAu35A95U+s6/MbpaNzNxew+EVDI+3dDCtCojn2WbivqqwtpGcC4MOQ==",
+  "dgSpecHash": "z5q47/Woag9n2P3zfbctt97H6tnHqnIC7y5r5ZkoCMR4LxGsf6dDAIFFkSFptiqEV6AxKFeqyXIcBbnQIwiTeg==",
   "success": true,
-  "projectFilePath": "/Users/coleflannery/Documents/Webdev/Projects/terminal/server/server.csproj",
+  "projectFilePath": "/Users/coleflannery/Documents/Webdev/Projects/gotchi/server/server.csproj",
   "expectedPackageFiles": [
     "/Users/coleflannery/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/Users/coleflannery/.nuget/packages/microsoft.aspnetcore.cryptography.internal/8.0.8/microsoft.aspnetcore.cryptography.internal.8.0.8.nupkg.sha512",

@@ -8,7 +8,7 @@ using Data;
 
 namespace Controllers.ConversationController;
     [ApiController]
-    [Route("/conversation")]
+    [Route("/conversations")]
     [Authorize]
     public class ConversationController : ControllerBase {
 
@@ -24,30 +24,40 @@ namespace Controllers.ConversationController;
             _conversationsService = conversationsService;
         }
 
-        [HttpPost("/get", Name = "GetConversation")]
-        public List<string> Get()
+        [HttpGet(Name = "GetConversations")]
+        public List<Conversations> Get()
         {
-            Console.WriteLine(Messages);
-            return Messages;
+            List<Conversations> conversations = _conversationsService.GetConversations(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            return conversations;
         }
 
-        [HttpPost("/message", Name = "PostMessage")]
-        public async Task<IActionResult> Post([FromBody] Messages message, bool isNew)
+        [HttpPost("/reply", Name = "PostMessage")]
+        public async Task<IActionResult> Post([FromBody] MessagesDto dto, [FromQuery] bool isNew = false)
         {
             if (!ModelState.IsValid) {
+                _logger.LogInformation("/reply: Invalid payload.");
                 return BadRequest(ModelState);
             }
-            if(!isNew) {
-                var conversation = await _context.Conversations.FindAsync(message.ConversationsId);
+            if(!isNew || dto.ConversationsId != 0) {
+                 _logger.LogInformation("/reply: Adding to existing conversation.");
+                var conversation = await _context.Conversations.FindAsync(dto.ConversationsId);
                 if(conversation == null){
-                    return NotFound($"Conversation {message.conversationId} not found");
+                    return NotFound($"Conversation {dto.ConversationsId} not found");
                 }
+                Messages message = new Messages { Value = dto.Value, ConversationsId = dto.ConversationsId };
                 conversation.Messages.Add(message);
                 await _context.SaveChangesAsync();
                 return CreatedAtRoute("PostMessage", new { id = message.Id }, message);
             } else {
-                var conversation = await _conversationsService.CreateConversations(message, Int32.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value));
-                return CreatedAtRoute("PostMessage", new {id = conversation}, "conversation");
+                try{
+                    _logger.LogInformation("/reply: Adding a new conversation.");
+                    var conversation = await _conversationsService.CreateConversations(dto, User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                    return CreatedAtRoute("PostMessage", new {id = conversation}, "conversation");
+                }
+                catch (Exception error) {
+                    _logger.LogInformation("/reply: Error adding a new conversation.");
+                    return StatusCode(500, $"Internal server error: {error.Message}");
+                }
             }
         }
     }

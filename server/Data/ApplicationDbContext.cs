@@ -5,7 +5,7 @@ using Models.MessagesModel;
 using Models.ConversationsModel;
 
 namespace Data;
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<Users>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) {}
@@ -19,10 +19,8 @@ namespace Data;
                 .HasMany(u => u.Conversations)
                 .WithOne(c => c.Users)
                 .HasForeignKey(c => c.UsersId)
-                .OnDelete(DeleteBehavior.Cascade); // optional: defines what happens on user deletion
+                .OnDelete(DeleteBehavior.Cascade);
         }
-
-        public DbSet<Users> Users { get; set; }
         public DbSet<Messages> Messages { get; set; }
         public DbSet<Conversations> Conversations { get; set; }
     }

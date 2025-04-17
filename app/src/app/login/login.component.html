@@ -1,0 +1,15 @@
+<div>TEST</div>
+<form [formGroup]="loginForm" (ngSubmit)="submit()">
+    <label>
+        Username
+        <input type="username" formControlName="username" />
+        <div ngIf*="loginForm.controls.username.touched &&
+        loginForm.controls.username.invalid"> Invalid Username. </div>
+    </label>
+    <label>
+        Password
+        <input type="password" formControlName="password" />
+        <div ngIf*="loginForm.controls.password.touched &&
+        loginForm.controls.password.invalid"> Invalid Password. </div>
+    </label>
+</form>
