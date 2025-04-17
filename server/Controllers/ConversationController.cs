@@ -1,53 +1,63 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Models;
+using Services.ConversationsService;
+using Models.ConversationsModel;
+using System.Security.Claims;
+using Models.MessagesModel;
 using Data;
 
 namespace Controllers.ConversationController;
     [ApiController]
-    [Route("/conversation")]
+    [Route("/conversations")]
     [Authorize]
-    public class ConversationController : ControllerBase
-    {
+    public class ConversationController : ControllerBase {
 
         private readonly ApplicationDbContext _context;
-        public static List<Messages> Messages = new List<Messages>();
-        public static List<Summaries> Summaries = new List<Summaries>();
+        public static List<string> Messages = new List<string>();
+        public static List<Conversations> Conversations = new List<Conversations>();
         private readonly ILogger<ConversationController> _logger;
-
-        public ConversationController(ILogger<ConversationController> logger, ApplicationDbContext context)
+        private readonly IConversationsService _conversationsService;
+        public ConversationController(ILogger<ConversationController> logger, ApplicationDbContext context, IConversationsService conversationsService)
         {
             _logger = logger;
             _context = context;
+            _conversationsService = conversationsService;
         }
 
-        [HttpPost("/get", Name = "GetConversation")]
-        public List<Messages> Get()
+        [HttpGet(Name = "GetConversations")]
+        public List<Conversations> Get()
         {
-            Console.WriteLine(Messages);
-            return Messages;
+            List<Conversations> conversations = _conversationsService.GetConversations(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            return conversations;
         }
 
-        [HttpPost("/value", Name = "PostMessage")]
-        public async Task<IActionResult> Post([FromBody] Messages message)
-        {
-            if (!ModelState.IsValid) {
-                return BadRequest(ModelState);
-            }
-            await _context.Messages.AddAsync(message);
-            await _context.SaveChangesAsync();
-            return CreatedAtRoute("PostMessage", new { id = message.Id }, message);
-        }
-
-        [HttpPost("/summary", Name = "PostSummary")]
-        public async Task<IActionResult> Post([FromBody] Summaries summary)
+        [HttpPost("/reply", Name = "PostMessage")]
+        public async Task<IActionResult> Post([FromBody] MessagesDto dto, [FromQuery] bool isNew = false)
         {
             if (!ModelState.IsValid) {
+                _logger.LogInformation("/reply: Invalid payload.");
                 return BadRequest(ModelState);
             }
-            await _context.Summaries.AddAsync(summary);
-            await _context.SaveChangesAsync();
-            return CreatedAtRoute("PostMessage", new { id = summary.Id, userid = summary.UserId, title = summary.Title, instruction = summary.Instructions});
+            if(!isNew || dto.ConversationsId != 0) {
+                 _logger.LogInformation("/reply: Adding to existing conversation.");
+                var conversation = await _context.Conversations.FindAsync(dto.ConversationsId);
+                if(conversation == null){
+                    return NotFound($"Conversation {dto.ConversationsId} not found");
+                }
+                Messages message = new Messages { Value = dto.Value, ConversationsId = dto.ConversationsId };
+                conversation.Messages.Add(message);
+                await _context.SaveChangesAsync();
+                return CreatedAtRoute("PostMessage", new { id = message.Id }, message);
+            } else {
+                try{
+                    _logger.LogInformation("/reply: Adding a new conversation.");
+                    var conversation = await _conversationsService.CreateConversations(dto, User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                    return CreatedAtRoute("PostMessage", new {id = conversation}, "conversation");
+                }
+                catch (Exception error) {
+                    _logger.LogInformation("/reply: Error adding a new conversation.");
+                    return StatusCode(500, $"Internal server error: {error.Message}");
+                }
+            }
         }
     }

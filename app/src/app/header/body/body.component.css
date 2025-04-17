@@ -1,7 +1,7 @@
   .homepage {
     display: flex;
     height: 100vh;
-    width: 100vw;
+    width: 100%;
     flex-direction: row;
     font-family: system-ui, sans-serif;
     background-color: var(--background-color);
@@ -15,11 +15,10 @@
     display: flex;
     align-items: flex-end;
     height: 100%;
-    min-width: 48vw;
     padding: 4rem;
     padding-bottom: 12rem;
-    border: 1px solid var(--border-color);
     border-top: none;
+    flex: 0.8;
   }
 
   app-profile {
@@ -42,8 +41,10 @@
   width: 100%;
   height: fit-content;
   margin: 1rem;
-  padding: 1rem;
+  padding: 2rem;
   overflow-wrap: break-word;
+  border: 1px solid var(--border-color);
+  border-radius: var(--curve);
 }
 
 #task-form textarea {

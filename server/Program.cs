@@ -1,18 +1,27 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
-using Microsoft.Extensions.DependencyInjection;
+using Models.UsersModel;
 using Data;
-using Models;
+using Services.ConversationsService;
+using System.Text.Json.Serialization;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        // Optionally, you can also increase the maximum depth if needed:
+        // options.JsonSerializerOptions.MaxDepth = 64;
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpContextAccessor();
+builder.Logging.AddConsole();
+
+builder.Services.AddScoped<IConversationsService, ConversationsService>();
 
 builder.Services.AddCors(options =>
 {
@@ -30,7 +39,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(/* options => 
+builder.Services.AddDefaultIdentity<Users>(/* options => 
     options.SignIn.RequireConfirmedAccount = true */)   
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
@@ -48,9 +57,9 @@ app.UseCors();
 
 // app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
 app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapControllers();
 

@@ -1,7 +1,9 @@
-namespace Models;
+using Models.ConversationsModel;
+using Microsoft.AspNetCore.Identity;
 
-    public class Users {
-        public required string Username { get; set; }
-        public string? Email { get; set; }
-        public required string Password { get; set; }
+namespace Models.UsersModel;
+
+    public class Users : IdentityUser {
+        public virtual ICollection<Conversations> Conversations { get; set; } 
+        = new List<Conversations>();
     }
