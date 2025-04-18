@@ -1,15 +1,24 @@
-<div>TEST</div>
-<form [formGroup]="loginForm" (ngSubmit)="submit()">
-    <label>
-        Username
-        <input type="username" formControlName="username" />
-        <div ngIf*="loginForm.controls.username.touched &&
-        loginForm.controls.username.invalid"> Invalid Username. </div>
-    </label>
-    <label>
-        Password
-        <input type="password" formControlName="password" />
-        <div ngIf*="loginForm.controls.password.touched &&
-        loginForm.controls.password.invalid"> Invalid Password. </div>
-    </label>
+<form class="login-container" [formGroup]="loginForm" (ngSubmit)="submit()">
+    <div class="login-icon">
+        <ul>
+            <li class="icon-large" id="login-icon">✦</li>
+        </ul>
+    </div>
+    <div class="login-title">
+        <ul>
+            <li>Welcome back</li>
+        </ul>
+    </div>
+    <div class="login-form">
+        <div class="login-row">
+            <img class="icon-small" src="icons/profile.svg">
+            <input class="input" type="username" formControlName="username" placeholder="Username" required />
+            <div *ngIf="loginForm.get('username')?.touched && loginForm.get('username')?.invalid"> Invalid Username. </div>
+        </div>
+        <div class="login-row">
+            <img class="icon-small" src="icons/lock.svg">
+            <input class="input"  type="password" formControlName="password" placeholder="Password" required />
+            <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"> Invalid Password. </div>
+        </div>
+    </div>
 </form>

@@ -1,9 +1,0 @@
-.layout {
-    display: flex;
-    flex-direction: row;
-    width: 100vw;
-}
-
-.layout * {
-    flex: 1;
-}
